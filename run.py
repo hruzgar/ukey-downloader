@@ -16,7 +16,10 @@ def main():
 		
 	except:
 		driver.quit()
-	print(dersler_div.text)
+	dersler = dersler_div.find_elements(By.TAG_NAME, "li")
+	for ders in dersler:
+		print(ders.text)
+	
 	#dersler_div = driver.find_element(By.CLASS_NAME, "metro")
 	
 
