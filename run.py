@@ -12,13 +12,17 @@ driver = webdriver.Chrome(PATH)
 def main():
 	log_in()
 	try:
-		dersler_div = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro")))
-		
+		first_class = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_element(By.TAG_NAME, "li").find_element(By.TAG_NAME, "a")		
 	except:
+		print("Please check you Internet connection!")
 		driver.quit()
-	dersler = dersler_div.find_elements(By.TAG_NAME, "li")
-	for ders in dersler:
-		print(ders.text)
+
+	first_class.click()
+	time.sleep(1)
+	download_for_current_class()
+	time.sleep(1)
+	driver.quit()
+	
 	
 	
 	
@@ -38,6 +42,17 @@ def log_in():
 	check_student.click()
 	pw.send_keys(Keys.RETURN)
 	# We should be inside Ukey on our Homepage right now
+
+def download_for_current_class():
+	driver.get("https://ukey.uludag.edu.tr/Ogrenci/DersMateryalleri")
+	try:
+		download_links = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "dosya")))		
+	except:
+		print("Please check you Internet connection!")
+		driver.quit()
+	for down_link in download_links:
+		down_link.click()
+		time.sleep(10)
 
 
 if __name__ == "__main__":
