@@ -20,7 +20,7 @@ def main():
 	for ders in dersler:
 		print(ders.text)
 	
-	#dersler_div = driver.find_element(By.CLASS_NAME, "metro")
+	
 	
 
 
