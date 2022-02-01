@@ -12,11 +12,11 @@ import sys
 
 chrome_options = webdriver.ChromeOptions()
 # chrome_options.add_argument('--headless')
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--ignore-certificate-errors')
-chrome_options.add_argument('--ignore-ssl-errors')
-chrome_options.add_argument('--disable-gpu')
-chrome_options.add_argument('--disable-software-rasterizer')
+# chrome_options.add_argument('--no-sandbox')
+# chrome_options.add_argument('--ignore-certificate-errors')
+# chrome_options.add_argument('--ignore-ssl-errors')
+# chrome_options.add_argument('--disable-gpu')
+# chrome_options.add_argument('--disable-software-rasterizer')
 
 session = requests.Session()
 
@@ -82,6 +82,22 @@ def download_for_current_class(link_of_class, name_of_class):
 	driver.get(link_of_class)
 	driver.get("https://ukey.uludag.edu.tr/Ogrenci/DersMateryalleri")
 	try:
+		tr_list = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.TAG_NAME, "tbody"))).find_elements(By.TAG_NAME, "tr")
+		for tr in tr_list:
+			td_list = tr.find_elements(By.TAG_NAME, "td")
+			for td in td_list:
+				if(td.text == "Dosyayı Aç"):
+					link = td.find_element(By.TAG_NAME, "a").get_attribute("href")
+
+					name_list = tr.text.split(" ")[:-4]
+					name_str = "-".join(name_list)
+					
+					week_num = tr.text.split(" ")[-3]
+					
+					print(week_num + "_" + name_of_class.split(" ")[0] + "_" + name_str, "\n", link,"\n\n\n")
+
+
+		"""
 		download_links = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "dosya")))
 		for i, down_link in enumerate(download_links):
 			link = down_link.get_attribute("href")
@@ -100,6 +116,7 @@ def download_for_current_class(link_of_class, name_of_class):
 			print("Writing-File elapsed time:", time.time() - start, "\n")
 
 			time.sleep(1)	
+		"""
 	except:
 		print("No Download on this Page!")
 		# driver.quit()
