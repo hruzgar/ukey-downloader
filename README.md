@@ -20,4 +20,4 @@ You don't need to install any python packages at all. You even don't need python
 - selenium-wire
 
 ## 🤝🏻 Contributing
-Contributing is welcome and will be much appreciated. If you know some python you could watch some videos about the Selenium-Framework and help improving the project. Thank you!
+Contributions are welcome and will be much appreciated. If you know some python you could watch some videos about the Selenium-Framework and help improving the project. Thank you!
