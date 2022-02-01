@@ -13,6 +13,9 @@ import sys
 import os.path
 import mimetypes
 
+
+start = time.time()
+
 chromedriver_PATH = "chrome/cdriver/chromedriver.exe"
 chrome_PATH = "chrome/App/Chrome-bin/chrome.exe"
 
@@ -32,20 +35,42 @@ session = requests.Session()
 driver = webdriver.Chrome(executable_path=chromedriver_PATH, options=chrome_options, desired_capabilities=DesiredCapabilities.CHROME)
 class_links = [];
 headers = {"Host":"ukey.uludag.edu.tr",
-	"Connection":"keep-alive",
-	"Cache-Control":"max-age=0",
-	"sec-ch-ua":'" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"',
-	"sec-ch-ua-platform":'"Windows"',
-	"Upgrade-Insecure-Requests":"1",
-	"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
-	"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-	"Sec-Fetch-Site":"same-origin",
-	"Sec-Fetch-Mode":"navigate",
-	"Sec-Fetch-User":"?1",
-	"Sec-Fetch-Dest":"document",
-	"Accept-Encoding":"gzip, deflate, br",
-	"Accept-Language": "de-DE,de;q=0.9,tr-TR;q=0.8,tr;q=0.7,en-US;q=0.6,en;q=0.5"
-	}
+		"Connection":"keep-alive",
+		"Cache-Control":"max-age=0",
+		"sec-ch-ua":'" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"',
+		"sec-ch-ua-platform":'"Windows"',
+		"Upgrade-Insecure-Requests":"1",
+		"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
+		"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+		"Sec-Fetch-Site":"same-origin",
+		"Sec-Fetch-Mode":"navigate",
+		"Sec-Fetch-User":"?1",
+		"Sec-Fetch-Dest":"document",
+		"Accept-Encoding":"gzip, deflate, br",
+		"Accept-Language": "de-DE,de;q=0.9,tr-TR;q=0.8,tr;q=0.7,en-US;q=0.6,en;q=0.5"
+		}
+extension_dict = {'application/msword': '.doc',
+				'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+				'application/vnd.openxmlformats-officedocument.wordprocessingml.template': '.dotx',
+				'application/vnd.ms-word.document.macroEnabled.12': '.docm',
+				'application/vnd.ms-word.template.macroEnabled.12': '.dotm',
+				'application/vnd.ms-excel': '.xls',
+				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
+				'application/vnd.openxmlformats-officedocument.spreadsheetml.template': '.xltx',
+				'application/vnd.ms-excel.sheet.macroEnabled.12': '.xlsm',
+				'application/vnd.ms-excel.template.macroEnabled.12': '.xltm',
+				'application/vnd.ms-excel.addin.macroEnabled.12': '.xlam',
+				'application/vnd.ms-excel.sheet.binary.macroEnabled.12': '.xlsb',
+				'application/vnd.ms-powerpoint': '.ppt',
+				'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx',
+				'application/vnd.ms-powerpoint.addin.macroEnabled.12': '.ppam',
+				'application/vnd.ms-powerpoint.presentation.macroEnabled.12': '.pptm',
+				'application/vnd.ms-powerpoint.template.macroEnabled.12': '.potm',
+				'application/vnd.ms-powerpoint.slideshow.macroEnabled.12': '.ppsm',
+				'application/vnd.ms-access': '.mdb',
+				'application/pdf':'.pdf'
+				}
+
 dest_folder = os.path.expandvars('%userprofile%/Downloads/ukey-download')
 if not os.path.isdir(dest_folder):
 	os.mkdir(dest_folder)
@@ -71,8 +96,8 @@ def main():
 	for link, name in class_links:
 		# iterates through all the classes and downloads
 		download_for_current_class(link, name)
-
-	print("Süpeeer! Indirme basarili!\nindirilen dosyalari 'Downloads' klasöründe bulabilirsin.\n\n\nHayirli calismalar ve iyi günler dilerim (:")
+	print("Indirme Süresi:", str(time.time() - start) + "s")
+	print("\n\nSüpeeer! Indirme basarili!\nindirilen dosyalari 'Downloads' klasöründe bulabilirsin.\n\n\nHayirli calismalar ve iyi günler dilerim (:")
 	
 	
 	
@@ -128,16 +153,17 @@ def download_for_current_class(link_of_class, name_of_class):
 					start = time.time()
 					# Get Request
 					r = session.get(link, allow_redirects=True, headers=headers)
-					print("Get-Request elapsed time:", time.time() - start)
+					print("Get-Request elapsed time:", str(time.time() - start) + "s")
 					
 					content_type = r.headers['content-type']
-					f_type = mimetypes.guess_extension(content_type)
+					f_type = extension_dict[content_type]
+					print(f_type)
 					start = time.time()
 					# writing to file
 					with open(os.path.join(dest_dir, week_num + "_" + name_str + f_type), "wb") as file:
 						for chunk in r.iter_content(chunk_size=128):
 							file.write(chunk)
-					print("Writing-File elapsed time:", time.time() - start, "\n\n\n")
+					print("Writing-File elapsed time:", str(time.time() - start) + "s", "\n\n\n")
 					
 					# print(week_num + "_" + name_of_class.split(" ")[0] + "_" + name_str, "\n", link,"\n\n\n")
 
@@ -167,6 +193,7 @@ def to_ascii(my_str):
 	new_ascii = new_ascii.replace('\u00D6', 'O').replace('\u00F6', 'o')
 	new_ascii = new_ascii.replace('/', '_').replace('\\', '_')
 	return new_ascii
+
 
 if __name__ == "__main__":
 	main()
