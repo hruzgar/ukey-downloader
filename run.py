@@ -33,23 +33,18 @@ def main():
 	except:
 		print("Please check you Internet connection!")
 		driver.quit()
-	time.sleep(1)
-	for request in driver.requests:
-		if request.url == "https://ukey.uludag.edu.tr/Images/ukeyuser.jpg":
-			headers["Cookie"] = request.headers["Cookie"]
-			print("\n", request.url, "\n")
-			print(request.headers["Cookie"], "\n\n\n") 
 	
-
-
-
+	get_cookies()
+	
 	for my_class in classes:
 		# finds all class links
 		class_link = my_class.find_element(By.TAG_NAME, "a").get_attribute("href")
 		class_name = my_class.find_element(By.TAG_NAME, "a").text
 		class_links.append((class_link, class_name))
+
 	print(class_links)
-	for link, namae in class_links:
+
+	for link, name in class_links:
 		# iterates through all the classes and downloads
 		download_for_current_class(link, name)
 	
@@ -77,12 +72,16 @@ def download_for_current_class(link_of_class, name_of_class):
 		download_links = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "dosya")))
 		for i, down_link in enumerate(download_links):
 			link = down_link.get_attribute("href")
-			print("\nDownloading:", link, "\n")
+			print("\nDownloading:", link)
+			start = time.time()
 			r = requests.get(link, allow_redirects=True, headers=headers)
-
-			with open(str(i) + name_of_class + ".txt", "wb") as file:
+			print("Get-Request elapsed time:", time.time() - start)
+			
+			start = time.time()
+			with open(str(i) + "_" + name_of_class.split(" ")[0] + ".txt", "wb") as file:
 				for chunk in r.iter_content(chunk_size=128):
 					file.write(chunk)
+			print("Writing-File elapsed time:", time.time() - start, "\n")
 			# filename = getFilename_fromCd(r.headers.get('content-disposition'))
 			# print(filename)
 			# down_link.click()		
@@ -93,6 +92,13 @@ def download_for_current_class(link_of_class, name_of_class):
 		# time.sleep(3)
 	driver.back()
 	driver.back()
+
+def get_cookies():
+	time.sleep(0.5)
+	for request in driver.requests:
+		if request.url == "https://ukey.uludag.edu.tr/Images/ukeyuser.jpg":
+			headers["Cookie"] = request.headers["Cookie"]
+			print("\nusing Cookies:",request.headers["Cookie"], "\n\n\n") 
 
 def getFilename_fromCd(cd):
 	"""
