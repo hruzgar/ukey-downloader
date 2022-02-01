@@ -52,9 +52,7 @@ extension_dict = {'application/msword': '.doc',
                 'application/pdf':'.pdf'
                 }
 
-dest_folder = os.path.expandvars('%userprofile%/Downloads/ukey-download')
-if not os.path.isdir(dest_folder):
-    os.mkdir(dest_folder)
+
 
     
 def get_driver():
@@ -103,7 +101,7 @@ def get_cookies(driver):
             headers["Cookie"] = request.headers["Cookie"]
             print("\nusing Cookies:",request.headers["Cookie"], "\n\n\n") 
 
-def download_for_current_class(link_of_class, name_of_class): 
+def download_for_current_class(link_of_class, name_of_class, dest_folder): 
     driver.get(link_of_class)
     driver.get("https://ukey.uludag.edu.tr/Ogrenci/DersMateryalleri")
     try:
@@ -190,9 +188,15 @@ def main():
 
     print("Birinci indirme 20 saniye sürüyor. Sonra hizlanacak\n")
     session = requests.Session()
+    
+    # crete dest folder
+    dest_folder = os.path.expandvars('%userprofile%/Downloads/ukey-download')
+    if not os.path.isdir(dest_folder):
+        os.mkdir(dest_folder)
+
     for link, name in class_links:
         # iterates through all the classes and downloads
-        download_for_current_class(link, name)
+        download_for_current_class(link, name, dest_folder)
 
     print("Indirme Süresi:", str(time.time() - start) + "s")
     print("\n\nSüpeeer! Indirme basarili!\nindirilen dosyalari 'Downloads' klasöründe bulabilirsin.\n\n\nHayirli calismalar ve iyi günler dilerim (:")
