@@ -72,7 +72,7 @@ def main():
 		# iterates through all the classes and downloads
 		download_for_current_class(link, name)
 
-	print("Süpeeer! Indime basarili!\nindirilen dosyalari 'Downloads' klasorunde bulabilirsiniz.\nHayirli calismalar ve iyi günler (:")
+	print("Süpeeer! Indirme basarili!\nindirilen dosyalari 'Downloads' klasöründe bulabilirsin.\n\n\nHayirli calismalar ve iyi günler dilerim (:")
 	
 	
 	
@@ -120,7 +120,7 @@ def download_for_current_class(link_of_class, name_of_class):
 						name_list = tr.text.split(" ")[:-4]
 					else:
 						name_list = tr.text.split(" ")[:-6]
-						
+
 					name_str = to_ascii("-".join(name_list))
 					week_num = tr.text.split(" ")[-3]
 
