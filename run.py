@@ -92,7 +92,7 @@ def main():
 		class_name = my_class.find_element(By.TAG_NAME, "a").text
 		class_links.append((class_link, class_name))
 
-	print("Lütfen bekle! Birinci indirme 20 saniye sürüyor. Sonra hizlanacak\n")
+	print("Birinci indirme 20 saniye sürüyor. Sonra hizlanacak\n")
 	for link, name in class_links:
 		# iterates through all the classes and downloads
 		download_for_current_class(link, name)
@@ -106,9 +106,9 @@ def main():
 
 
 def log_in():
-	# student_num = input("\n\nLütfen ögrenci numaranizi giriniz: ")
-	# passw = input("Lütfen sifrenizi giriniz: ")
-	print("\nGiris yapiliyor... (20 saniye sürüyor. Lütfen bekle)\n")
+	student_num = input("\n\nLütfen ögrenci numaranizi giriniz: ")
+	passw = input("Lütfen sifrenizi giriniz: ")
+	print("\nGiris yapiliyor... (20 saniye sürüyor. Lütfen bekle)\n\nTüm indirme yaklasik olarak 5 dakika sürecek. Git kendine bir kahve yap (;\n")
 	driver.get("https://ukey.uludag.edu.tr")
 	print("\nGiris yapildi!\n")
 	username = driver.find_element(By.ID, "KullaniciKodu")
@@ -116,8 +116,8 @@ def log_in():
 	check_student = driver.find_element(By.XPATH, "//input[@value='Student']");
 	
 
-	username.send_keys("032190148")
-	pw.send_keys("GuzSifre99")
+	username.send_keys(student_num)
+	pw.send_keys(passw)
 	check_student.click()
 	pw.send_keys(Keys.RETURN)
 	# We should be on the Ukey Homepage now
