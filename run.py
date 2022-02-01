@@ -18,13 +18,26 @@ chrome_options.add_argument('--ignore-ssl-errors')
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-software-rasterizer')
 
+session = requests.Session()
 
 PATH = "C:\\prog\\chromedriver.exe"
 driver = webdriver.Chrome(PATH, options=chrome_options)
 class_links = [];
-headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
+headers = {"Host":"ukey.uludag.edu.tr",
+	"Connection":"keep-alive",
+	"Cache-Control":"max-age=0",
+	"sec-ch-ua":'" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"',
+	"sec-ch-ua-platform":'"Windows"',
+	"Upgrade-Insecure-Requests":"1",
+	"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
 	"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-	"Host":"ukey.uludag.edu.tr"}
+	"Sec-Fetch-Site":"same-origin",
+	"Sec-Fetch-Mode":"navigate",
+	"Sec-Fetch-User":"?1",
+	"Sec-Fetch-Dest":"document",
+	"Accept-Encoding":"gzip, deflate, br",
+	"Accept-Language": "de-DE,de;q=0.9,tr-TR;q=0.8,tr;q=0.7,en-US;q=0.6,en;q=0.5"
+	}
 
 def main():
 	log_in()
@@ -73,18 +86,20 @@ def download_for_current_class(link_of_class, name_of_class):
 		for i, down_link in enumerate(download_links):
 			link = down_link.get_attribute("href")
 			print("\nDownloading:", link)
+
 			start = time.time()
-			r = requests.get(link, allow_redirects=True, headers=headers)
+			# Get Request
+			r = session.get(link, allow_redirects=True, headers=headers)
 			print("Get-Request elapsed time:", time.time() - start)
 			
 			start = time.time()
+			# writing to file
 			with open(str(i) + "_" + name_of_class.split(" ")[0] + ".txt", "wb") as file:
 				for chunk in r.iter_content(chunk_size=128):
 					file.write(chunk)
 			print("Writing-File elapsed time:", time.time() - start, "\n")
-			# filename = getFilename_fromCd(r.headers.get('content-disposition'))
-			# print(filename)
-			# down_link.click()		
+
+			time.sleep(1)	
 	except:
 		print("No Download on this Page!")
 		# driver.quit()
