@@ -11,6 +11,7 @@ For now there is only a working release for Windows
 2. Extract the zip-file
 3. Double-Click on run.exe
 That's all !!!
+You don't need to install any python packages at all. You even don't need python. Just a working Windows machine will be enough!
 
 ## 🐍 Used Python libraries
 - selenium
