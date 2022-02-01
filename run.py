@@ -153,22 +153,23 @@ def download_for_current_class(link_of_class, name_of_class):
 					week_num = tr.text.split(" ")[-3]
 
 					print("\nDownloading...\n" + week_num + "_" + class_n[0] + "_" + name_str)
-					start = time.time()
+					
 					# Get Request
+					start = time.time()
 					r = session.get(link, allow_redirects=True, headers=headers)
 					print("Get-Request elapsed time:", str(time.time() - start) + "s")
 					
+					# gets file extension (for example:".pdf")
 					content_type = r.headers['content-type']
 					f_type = extension_dict[content_type]
 					print(f_type)
-					start = time.time()
+					
 					# writing to file
+					start = time.time()
 					with open(os.path.join(dest_dir, week_num + "_" + name_str + f_type), "wb") as file:
 						for chunk in r.iter_content(chunk_size=128):
 							file.write(chunk)
 					print("Writing-File elapsed time:", str(time.time() - start) + "s", "\n\n\n")
-					
-					# print(week_num + "_" + name_of_class.split(" ")[0] + "_" + name_str, "\n", link,"\n\n\n")
 
 
 	except:
