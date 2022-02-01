@@ -13,7 +13,7 @@ For now there is only a working release for Windows
 
 That's all !!!
 
-You don't need to install any python packages at all. You even don't need python. Just a working Windows machine will be enough!
+You don't need to install any python packages at all. You don't even need python. Just a working Windows machine will be enough!
 
 ## 🐍 Used Python libraries
 - selenium
