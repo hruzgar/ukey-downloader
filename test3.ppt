@@ -1,0 +1,41 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+
+</title></head>
+<body>
+
+    <br />
+    <div style="font-size: 15px; font-family: Verdana; vertical-align: middle;" align="center">
+        <div style="min-width: 350px; color: #464141">
+            <div>
+                <b>SİSTEMDE TANIMLANAMAYAN BİR HATA OLUŞTU.</b>
+            </div>
+            <br />
+
+            <div style="font-size: 12px; width:650px"  align="left">
+                <b>Muhtemel sebepler</b>
+                <ul>
+                    <li>Oturumunuz sonlanmış olabilir.</li>
+                    <li>Dosya yüklüyorsanız, izin verilen en büyük dosya boyutunu aşmış olabilirsiniz.</li>
+                    <li>Veri giriş ekranlarında tarayıcınızın "Geri", "İleri" butonlarını kullanarak işlem yapmış olabilirsiniz.</li>
+                    <li>Sistemde bulunmayan bir sayfaya erişmek istiyor olabilirsiniz.</li>
+                </ul>
+
+            </div>
+
+            <hr />
+            <br />
+            <div>
+                <a href="/Giris/" style="color: #772525; font-weight: bold">Anasayfaya dönmek için Tıklayınız.</a>
+            </div>
+            <br />
+
+        </div>
+    </div>
+
+</body>
+</html>
