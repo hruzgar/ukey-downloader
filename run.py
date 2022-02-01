@@ -56,39 +56,9 @@ dest_folder = os.path.expandvars('%userprofile%/Downloads/ukey-download')
 if not os.path.isdir(dest_folder):
 	os.mkdir(dest_folder)
 
-
-def main():
-	start = time.time()
-	driver = get_driver()
-	log_in(driver)
-	try:
-		classes = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")		
-	except:
-		print("Please check you Internet connection!")
-		driver.quit()
-	
-	get_cookies(driver)
-	
-	class_links = [];
-	for my_class in classes:
-		# finds all class links
-		class_link = my_class.find_element(By.TAG_NAME, "a").get_attribute("href")
-		class_name = my_class.find_element(By.TAG_NAME, "a").text
-		class_links.append((class_link, class_name))
-
-	print("Birinci indirme 20 saniye sürüyor. Sonra hizlanacak\n")
-	session = requests.Session()
-	for link, name in class_links:
-		# iterates through all the classes and downloads
-		download_for_current_class(link, name)
-
-	print("Indirme Süresi:", str(time.time() - start) + "s")
-	print("\n\nSüpeeer! Indirme basarili!\nindirilen dosyalari 'Downloads' klasöründe bulabilirsin.\n\n\nHayirli calismalar ve iyi günler dilerim (:")
-	
-	
-	
 	
 def get_driver():
+
 	# Path to chrome and chromedriver
 	chromedriver_PATH = "chrome/cdriver/chromedriver.exe"
 	chrome_PATH = "chrome/App/Chrome-bin/chrome.exe"
@@ -104,6 +74,7 @@ def get_driver():
 	chrome_options.add_argument('--incognito')
 	chrome_options.binary_location = chrome_PATH
 
+	# return driver
 	return webdriver.Chrome(executable_path=chromedriver_PATH, options=chrome_options, desired_capabilities=DesiredCapabilities.CHROME)
 
 def log_in(driver):
@@ -124,6 +95,13 @@ def log_in(driver):
 	check_student.click()
 	pw.send_keys(Keys.RETURN)
 	# We should be on the Ukey Homepage now
+
+def get_cookies(driver):
+	time.sleep(0.5)
+	for request in driver.requests:
+		if request.url == "https://ukey.uludag.edu.tr/Images/ukeyuser.jpg":
+			headers["Cookie"] = request.headers["Cookie"]
+			print("\nusing Cookies:",request.headers["Cookie"], "\n\n\n") 
 
 def download_for_current_class(link_of_class, name_of_class): 
 	driver.get(link_of_class)
@@ -180,13 +158,6 @@ def download_for_current_class(link_of_class, name_of_class):
 	driver.back()
 	driver.back()
 
-def get_cookies(driver):
-	time.sleep(0.5)
-	for request in driver.requests:
-		if request.url == "https://ukey.uludag.edu.tr/Images/ukeyuser.jpg":
-			headers["Cookie"] = request.headers["Cookie"]
-			print("\nusing Cookies:",request.headers["Cookie"], "\n\n\n") 
-
 
 def to_ascii(my_str):
 	new_ascii = my_str.replace('\u0130', 'I').replace('\u0131', 'i')
@@ -198,6 +169,33 @@ def to_ascii(my_str):
 	new_ascii = new_ascii.replace('/', '_').replace('\\', '_')
 	return new_ascii
 
+def main():
+	start = time.time()
+	driver = get_driver()
+	log_in(driver)
+	try:
+		classes = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")		
+	except:
+		print("Please check you Internet connection!")
+		driver.quit()
+	
+	get_cookies(driver)
+	
+	class_links = [];
+	for my_class in classes:
+		# finds all class links
+		class_link = my_class.find_element(By.TAG_NAME, "a").get_attribute("href")
+		class_name = my_class.find_element(By.TAG_NAME, "a").text
+		class_links.append((class_link, class_name))
+
+	print("Birinci indirme 20 saniye sürüyor. Sonra hizlanacak\n")
+	session = requests.Session()
+	for link, name in class_links:
+		# iterates through all the classes and downloads
+		download_for_current_class(link, name)
+
+	print("Indirme Süresi:", str(time.time() - start) + "s")
+	print("\n\nSüpeeer! Indirme basarili!\nindirilen dosyalari 'Downloads' klasöründe bulabilirsin.\n\n\nHayirli calismalar ve iyi günler dilerim (:")
 
 if __name__ == "__main__":
 	main()
