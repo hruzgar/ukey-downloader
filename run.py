@@ -8,14 +8,23 @@ from seleniumwire import webdriver
 import time
 import requests
 import re
+import sys
 
 chrome_options = webdriver.ChromeOptions()
 # chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--ignore-certificate-errors')
+chrome_options.add_argument('--ignore-ssl-errors')
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--disable-software-rasterizer')
+
 
 PATH = "C:\\prog\\chromedriver.exe"
 driver = webdriver.Chrome(PATH, options=chrome_options)
 class_links = [];
+headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
+	"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+	"Host":"ukey.uludag.edu.tr"}
 
 def main():
 	log_in()
@@ -24,26 +33,29 @@ def main():
 	except:
 		print("Please check you Internet connection!")
 		driver.quit()
-
+	time.sleep(1)
 	for request in driver.requests:
-		if(request.url == "https://ukey.uludag.edu.tr/Images/ukeyuser.jpg"):
-  			print(request.url) # <--------------- Request url
-  			print(request.headers) #
+		if request.url == "https://ukey.uludag.edu.tr/Images/ukeyuser.jpg":
+			headers["Cookie"] = request.headers["Cookie"]
+			print("\n", request.url, "\n")
+			print(request.headers["Cookie"], "\n\n\n") 
+	
+
 
 
 	for my_class in classes:
+		# finds all class links
 		class_link = my_class.find_element(By.TAG_NAME, "a").get_attribute("href")
-		class_links.append(class_link)
-	for link in class_links:
-		download_for_current_class(link)
+		class_name = my_class.find_element(By.TAG_NAME, "a").text
+		class_links.append((class_link, class_name))
 	print(class_links)
+	for link, namae in class_links:
+		# iterates through all the classes and downloads
+		download_for_current_class(link, name)
 	
 	
 	
 	
-
-
-
 
 
 
@@ -58,20 +70,19 @@ def log_in():
 	pw.send_keys(Keys.RETURN)
 	# We should be on the Ukey Homepage now
 
-def download_for_current_class(link_of_class): 
+def download_for_current_class(link_of_class, name_of_class): 
 	driver.get(link_of_class)
 	driver.get("https://ukey.uludag.edu.tr/Ogrenci/DersMateryalleri")
 	try:
 		download_links = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "dosya")))
-		for down_link in download_links:
+		for i, down_link in enumerate(download_links):
 			link = down_link.get_attribute("href")
-			print(link)
-			#for request in driver.requests:
-			#	if(request.url == "https://ukey.uludag.edu.tr/Ogrenci/DersMateryalleri"):
-  			#		print(request.url) # <--------------- Request url
-  			#		print(request.headers) #
-			# r = requests.get(link, allow_redirects=True)
-			# print(r)
+			print("\nDownloading:", link, "\n")
+			r = requests.get(link, allow_redirects=True, headers=headers)
+
+			with open(str(i) + name_of_class + ".txt", "wb") as file:
+				for chunk in r.iter_content(chunk_size=128):
+					file.write(chunk)
 			# filename = getFilename_fromCd(r.headers.get('content-disposition'))
 			# print(filename)
 			# down_link.click()		
