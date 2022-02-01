@@ -15,26 +15,6 @@ import os.path
 import mimetypes
 
 
-start = time.time()
-
-chromedriver_PATH = "chrome/cdriver/chromedriver.exe"
-chrome_PATH = "chrome/App/Chrome-bin/chrome.exe"
-
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--ignore-certificate-errors')
-chrome_options.add_argument('--ignore-ssl-errors')
-chrome_options.add_argument('--disable-gpu')
-chrome_options.add_argument('--disable-software-rasterizer')
-chrome_options.add_argument('--incognito')
-chrome_options.binary_location = chrome_PATH
-
-session = requests.Session()
-
-
-driver = webdriver.Chrome(executable_path=chromedriver_PATH, options=chrome_options, desired_capabilities=DesiredCapabilities.CHROME)
-class_links = [];
 headers = {"Host":"ukey.uludag.edu.tr",
 		"Connection":"keep-alive",
 		"Cache-Control":"max-age=0",
@@ -78,15 +58,18 @@ if not os.path.isdir(dest_folder):
 
 
 def main():
-	log_in()
+	start = time.time()
+	driver = get_driver()
+	log_in(driver)
 	try:
 		classes = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")		
 	except:
 		print("Please check you Internet connection!")
 		driver.quit()
 	
-	get_cookies()
+	get_cookies(driver)
 	
+	class_links = [];
 	for my_class in classes:
 		# finds all class links
 		class_link = my_class.find_element(By.TAG_NAME, "a").get_attribute("href")
@@ -94,29 +77,48 @@ def main():
 		class_links.append((class_link, class_name))
 
 	print("Birinci indirme 20 saniye sürüyor. Sonra hizlanacak\n")
+	session = requests.Session()
 	for link, name in class_links:
 		# iterates through all the classes and downloads
 		download_for_current_class(link, name)
+
 	print("Indirme Süresi:", str(time.time() - start) + "s")
 	print("\n\nSüpeeer! Indirme basarili!\nindirilen dosyalari 'Downloads' klasöründe bulabilirsin.\n\n\nHayirli calismalar ve iyi günler dilerim (:")
 	
 	
 	
 	
+def get_driver():
+	# Path to chrome and chromedriver
+	chromedriver_PATH = "chrome/cdriver/chromedriver.exe"
+	chrome_PATH = "chrome/App/Chrome-bin/chrome.exe"
 
+	# chrome settings for selenium
+	chrome_options = webdriver.ChromeOptions()
+	chrome_options.add_argument('--headless')
+	chrome_options.add_argument('--no-sandbox')
+	chrome_options.add_argument('--ignore-certificate-errors')
+	chrome_options.add_argument('--ignore-ssl-errors')
+	chrome_options.add_argument('--disable-gpu')
+	chrome_options.add_argument('--disable-software-rasterizer')
+	chrome_options.add_argument('--incognito')
+	chrome_options.binary_location = chrome_PATH
 
+	return webdriver.Chrome(executable_path=chromedriver_PATH, options=chrome_options, desired_capabilities=DesiredCapabilities.CHROME)
 
-def log_in():
+def log_in(driver):
+	# get Student-Number and Password as Input
 	student_num = input("\n\nLütfen ögrenci numaranizi giriniz: ")
 	passw = input("Lütfen sifrenizi giriniz: ")
+
 	print("\nGiris yapiliyor... (20 saniye sürüyor. Lütfen bekle)\n\nTüm indirme yaklasik olarak 5 dakika sürecek. Git kendine bir kahve yap (;\n")
 	driver.get("https://ukey.uludag.edu.tr")
 	print("\nGiris yapildi!\n")
+
 	username = driver.find_element(By.ID, "KullaniciKodu")
 	pw = driver.find_element(By.ID, "sifre")
 	check_student = driver.find_element(By.XPATH, "//input[@value='Student']");
 	
-
 	username.send_keys(student_num)
 	pw.send_keys(passw)
 	check_student.click()
@@ -177,7 +179,7 @@ def download_for_current_class(link_of_class, name_of_class):
 	driver.back()
 	driver.back()
 
-def get_cookies():
+def get_cookies(driver):
 	time.sleep(0.5)
 	for request in driver.requests:
 		if request.url == "https://ukey.uludag.edu.tr/Images/ukeyuser.jpg":
