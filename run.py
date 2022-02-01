@@ -9,6 +9,7 @@ import time
 import requests
 import re
 import sys
+import os.path
 
 chrome_options = webdriver.ChromeOptions()
 # chrome_options.add_argument('--headless')
@@ -38,6 +39,10 @@ headers = {"Host":"ukey.uludag.edu.tr",
 	"Accept-Encoding":"gzip, deflate, br",
 	"Accept-Language": "de-DE,de;q=0.9,tr-TR;q=0.8,tr;q=0.7,en-US;q=0.6,en;q=0.5"
 	}
+dest_folder = os.path.expandvars('%userprofile%/Downloads/ukey-download')
+if not os.path.isdir(dest_folder):
+	os.mkdir(dest_folder)
+
 
 def main():
 	log_in()
@@ -87,38 +92,34 @@ def download_for_current_class(link_of_class, name_of_class):
 			td_list = tr.find_elements(By.TAG_NAME, "td")
 			for td in td_list:
 				if(td.text == "Dosyayı Aç"):
+					class_n = [to_ascii(x) for x in name_of_class.split(" - ")]
+					dest_dir = os.path.expandvars('%userprofile%/Downloads/ukey-download/' + "-".join(class_n[1].split(" ")))
+					if not os.path.isdir(dest_dir):
+						os.mkdir(dest_dir)
 					link = td.find_element(By.TAG_NAME, "a").get_attribute("href")
 
 					name_list = tr.text.split(" ")[:-4]
-					name_str = "-".join(name_list)
-					
+					name_str = to_ascii("-".join(name_list))
 					week_num = tr.text.split(" ")[-3]
-					
-					print(week_num + "_" + name_of_class.split(" ")[0] + "_" + name_str, "\n", link,"\n\n\n")
 
-
-		"""
-		download_links = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "dosya")))
-		for i, down_link in enumerate(download_links):
-			link = down_link.get_attribute("href")
-			print("\nDownloading:", link)
-
-			start = time.time()
-			# Get Request
-			r = session.get(link, allow_redirects=True, headers=headers)
-			print("Get-Request elapsed time:", time.time() - start)
+					print("\nDownloading: " + week_num + "_" + class_n[0] + "_" + name_str)
+					start = time.time()
+					# Get Request
+					r = session.get(link, allow_redirects=True, headers=headers)
+					print("Get-Request elapsed time:", time.time() - start)
 			
-			start = time.time()
-			# writing to file
-			with open(str(i) + "_" + name_of_class.split(" ")[0] + ".txt", "wb") as file:
-				for chunk in r.iter_content(chunk_size=128):
-					file.write(chunk)
-			print("Writing-File elapsed time:", time.time() - start, "\n")
+					start = time.time()
+					# writing to file
+					with open(os.path.join(dest_dir, week_num + "_" + name_str + ".txt"), "wb") as file:
+						for chunk in r.iter_content(chunk_size=128):
+							file.write(chunk)
+					print("Writing-File elapsed time:", time.time() - start, "\n\n\n")
+					
+					# print(week_num + "_" + name_of_class.split(" ")[0] + "_" + name_str, "\n", link,"\n\n\n")
 
-			time.sleep(1)	
-		"""
+
 	except:
-		print("No Download on this Page!")
+		print("\n\nNo Download on this Page!\n")
 		# driver.quit()
 	
 		# time.sleep(3)
@@ -142,6 +143,15 @@ def getFilename_fromCd(cd):
 	if len(fname) == 0:
 		return None
 	return fname[0]
+
+def to_ascii(my_str):
+	new_ascii = my_str.replace('\u0130', 'I').replace('\u0131', 'i')
+	new_ascii = new_ascii.replace('\u011e', 'G').replace('\u011f', 'g')
+	new_ascii = new_ascii.replace('\u015e', 'S').replace('\u015f', 's')
+	new_ascii = new_ascii.replace('\u00E7', 'c').replace('\u00C7', 'C')
+	new_ascii = new_ascii.replace('ü', 'u').replace('Ü', 'U')
+	new_ascii = new_ascii.replace('ö', 'o').replace('Ö', 'O')
+	return new_ascii
 
 if __name__ == "__main__":
 	main()
