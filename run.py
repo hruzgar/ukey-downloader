@@ -10,6 +10,7 @@ import requests
 import re
 import sys
 import os.path
+import mimetypes
 
 chrome_options = webdriver.ChromeOptions()
 # chrome_options.add_argument('--headless')
@@ -107,10 +108,12 @@ def download_for_current_class(link_of_class, name_of_class):
 					# Get Request
 					r = session.get(link, allow_redirects=True, headers=headers)
 					print("Get-Request elapsed time:", time.time() - start)
-			
+					
+					content_type = r.headers['content-type']
+					f_type = mimetypes.guess_extension(content_type)
 					start = time.time()
 					# writing to file
-					with open(os.path.join(dest_dir, week_num + "_" + name_str + ".txt"), "wb") as file:
+					with open(os.path.join(dest_dir, week_num + "_" + name_str + f_type), "wb") as file:
 						for chunk in r.iter_content(chunk_size=128):
 							file.write(chunk)
 					print("Writing-File elapsed time:", time.time() - start, "\n\n\n")
