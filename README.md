@@ -1,10 +1,10 @@
-# ukey-downloader
+# 🔗 ukey-downloader
 
-## Usecase
+## ℹ️ Usecase
 Download all the lesson materials from "https://ukey.uludag.edu.tr/".
 
 
-## How to use
+## 🧑🏻‍💻 How to use
 For now there is only a working release for Windows
 ### Windows
 1. Download the zip-file from releases
@@ -12,9 +12,9 @@ For now there is only a working release for Windows
 3. Double-Click on run.exe
 That's all !!!
 
-## Used Python libraries
+## 🐍 Used Python libraries
 - selenium
 - selenium-wire
 
-## Contributing
+## 🤝🏻 Contributing
 Contributing is welcome and will be much appreciated. If you know some python you could watch some videos about the Selenium-Framework and help improving the project. Thank you!
