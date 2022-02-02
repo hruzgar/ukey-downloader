@@ -173,8 +173,10 @@ def main():
     try:
         classes = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")        
     except:
-        print("Kullanici Adi veya Sifreniz hatali! Lütfen tekrar deneyiniz.")
-        log_in(driver)
+        print("\n\n\nKullanici Adi veya Sifreniz hatali! Lütfen tekrar deneyiniz.")
+        student_num = input("\n\nLütfen ögrenci numaranizi giriniz: ")
+        passw = input("Lütfen sifrenizi giriniz: ")
+        log_in(driver, student_num, passw)
         classes = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")
     
 
