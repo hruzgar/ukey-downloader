@@ -82,7 +82,6 @@ def log_in(driver):
 
     print("\nGiris yapiliyor... (20 saniye sürüyor. Lütfen bekle)\n\nTüm indirme yaklasik olarak 5 dakika sürecek. Git kendine bir kahve yap (;\n")
     driver.get("https://ukey.uludag.edu.tr")
-    print("\nGiris yapildi!\n")
 
     username = driver.find_element(By.ID, "KullaniciKodu")
     pw = driver.find_element(By.ID, "sifre")
@@ -103,7 +102,7 @@ def get_cookies(driver):
             print("\nusing Cookies:",request.headers["Cookie"], "\n\n\n") 
 
 
-def download_for_current_class(link_of_class, name_of_class): 
+def download_for_current_class(driver, session, link_of_class, name_of_class): 
     driver.get(link_of_class)
     driver.get("https://ukey.uludag.edu.tr/Ogrenci/DersMateryalleri")
     try:
@@ -174,9 +173,12 @@ def main():
     try:
         classes = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")        
     except:
-        print("Please check you Internet connection!")
-        driver.quit()
+        print("Kullanici Adi veya Sifreniz hatali! Lütfen tekrar deneyiniz.")
+        log_in(driver)
+        classes = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")
     
+
+    print("\nGiris yapildi!\n")
     get_cookies(driver)
     
     class_links = [];
@@ -196,7 +198,7 @@ def main():
 
     for link, name in class_links:
         # iterates through all the classes and downloads
-        download_for_current_class(link, name)
+        download_for_current_class(driver, session, link, name)
 
     print("Indirme Süresi:", str(time.time() - start) + "s")
     print("\n\nSüpeeer! Indirme basarili!\nindirilen dosyalari 'Downloads' klasöründe bulabilirsin.\n\n\nHayirli calismalar ve iyi günler dilerim (:")
