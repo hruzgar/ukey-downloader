@@ -62,7 +62,7 @@ def get_driver():
 
     # chrome settings for selenium
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--headless')
+    # chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--ignore-certificate-errors')
     chrome_options.add_argument('--ignore-ssl-errors')
@@ -75,11 +75,7 @@ def get_driver():
     return webdriver.Chrome(executable_path=chromedriver_PATH, options=chrome_options, desired_capabilities=DesiredCapabilities.CHROME)
 
 
-def log_in(driver):
-    # get Student-Number and Password as Input
-    student_num = input("\n\nLütfen ögrenci numaranizi giriniz: ")
-    passw = input("Lütfen sifrenizi giriniz: ")
-
+def log_in(driver, student_num, passw):
     print("\nGiris yapiliyor... (20 saniye sürüyor. Lütfen bekle)\n\nTüm indirme yaklasik olarak 5 dakika sürecek. Git kendine bir kahve yap (;\n")
     driver.get("https://ukey.uludag.edu.tr")
 
@@ -167,9 +163,13 @@ def to_ascii(my_str):
 
 
 def main():
+    # get Student-Number and Password as Input
+    student_num = input("\n\nLütfen ögrenci numaranizi giriniz: ")
+    passw = input("Lütfen sifrenizi giriniz: ")
+
     start = time.time()
     driver = get_driver()
-    log_in(driver)
+    log_in(driver, student_num, passw)
     try:
         classes = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")        
     except:
