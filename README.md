@@ -1,7 +1,7 @@
 # 🔗 ukey-downloader
 
 ## ℹ️ Usecase
-Download all the lesson materials from "https://ukey.uludag.edu.tr/". The semester finished and you want to download all the lecture-notes and slides? Normally you would click each download link, Create folders for each class, Rename the files (adding the week-number). That is just too much work to do. EASY NOW!!! 
+Download all the lesson materials from "https://ukey.uludag.edu.tr/". The semester finished and you want to download all the lecture-notes and slides? Normally you would click each download link, Create folders for each class, Rename the files (adding the week-number). That is just too much work to do. Not anymore! 
 
 ## ✨ Features
 - Downloads all the lecture-notes and slides assosiated with your student-number
