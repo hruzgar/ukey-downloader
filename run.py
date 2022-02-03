@@ -167,7 +167,7 @@ def download_for_current_class(driver, session, link_of_class, name_of_class):
 def main():
     start = time.time()
 
-    # start driver (selenium) and requests-session (for downloads)
+    # starts driver (selenium) and requests-session (for downloads)
     driver = get_driver()
     session = requests.Session()
 
@@ -202,9 +202,12 @@ def main():
         # iterates through all the classes and downloads
         download_for_current_class(driver, session, link, name)
 
+    driver.quit()
     print("\nSüpeeer! Indirme basarili!\nIndirilen dosyalari 'Downloads' klasöründe bulabilirsin.")
     print("Indirme Süresi:", get_time_dif(start))
-    print("\nHayirli calismalar ve iyi günler dilerim (:")
+    print("\nPencereyi kapatabilirsin simdi. 60 saniye icinde kendisi kapatacaktir.\nHayirli calismalar ve iyi günler dilerim (:")
+    time.sleep(60)
+
 
 
 if __name__ == "__main__":
