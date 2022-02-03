@@ -11,8 +11,8 @@ Tüm ders materyallerini "https://ukey.uludag.edu.tr/" adresinden indir. Dönem 
 - Dosyaları ASCII kullanarak yeniden adlandırır ve hafta numaralarını ekler.
 
 ## 🧑🏻‍💻 Nasıl Kullanılır
-Şimdilik sadece Windows işletim sisteminde çalışan sürümü mevcuttur.
-Windows
+Şimdilik sadece Windows işletim sisteminde çalışan sürümü mevcuttur
+### Windows
 1. Sürümün Zip dosyasını indir
 2. Zip dosyasını çıkart 
 3. run.exe dosyasına çift tıkla
