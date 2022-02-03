@@ -1,34 +1,18 @@
 import selenium
-import seleniumwire
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
-from seleniumwire import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium import webdriver
 import time
 import requests
 import re
 import sys
 import os.path
 
-headers = {
-    "Host":"ukey.uludag.edu.tr",
-    "Connection":"keep-alive",
-    "Cache-Control":"max-age=0",
-    "sec-ch-ua":'" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"',
-    "sec-ch-ua-platform":'"Windows"',
-    "Upgrade-Insecure-Requests":"1",
-    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
-    "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-    "Sec-Fetch-Site":"same-origin",
-    "Sec-Fetch-Mode":"navigate",
-    "Sec-Fetch-User":"?1",
-    "Sec-Fetch-Dest":"document",
-    "Accept-Encoding":"gzip, deflate, br",
-    "Accept-Language": "de-DE,de;q=0.9,tr-TR;q=0.8,tr;q=0.7,en-US;q=0.6,en;q=0.5"
-}
 
 extension_dict = {
     'application/msword': '.doc',
@@ -57,12 +41,13 @@ extension_dict = {
 def get_driver():
 
     # Path to chrome and chromedriver
-    chromedriver_PATH = "chrome/cdriver/chromedriver.exe"
+    chromedriver_service = Service("chrome/cdriver/chromedriver.exe")
     chrome_PATH = "chrome/App/Chrome-bin/chrome.exe"
 
     # chrome settings for selenium
     chrome_options = webdriver.ChromeOptions()
-    # chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--headless') # if activated browser is not shown to the end-user
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--ignore-certificate-errors')
     chrome_options.add_argument('--ignore-ssl-errors')
@@ -71,31 +56,60 @@ def get_driver():
     chrome_options.add_argument('--incognito')
     chrome_options.binary_location = chrome_PATH
 
-    # return driver
-    return webdriver.Chrome(executable_path=chromedriver_PATH, options=chrome_options, desired_capabilities=DesiredCapabilities.CHROME)
+    return webdriver.Chrome(service=chromedriver_service, options=chrome_options, desired_capabilities=DesiredCapabilities.CHROME)
 
 
-def log_in(driver, student_num, passw):
-    print("\nGiris yapiliyor... (20 saniye sürüyor. Lütfen bekle)\n\nTüm indirme yaklasik olarak 5 dakika sürecek. Git kendine bir kahve yap (;\n")
-    driver.get("https://ukey.uludag.edu.tr")
+def log_in(driver):
+    student_num = input("Lütfen ögrenci numaranizi giriniz: ")
+    passw = input("Lütfen sifrenizi giriniz: ")
 
+    print("\nGiris yapiliyor...\n") # \n\nTüm indirme yaklasik olarak 5 dakika sürecek. Git kendine bir kahve yap (;\n
+    
     username = driver.find_element(By.ID, "KullaniciKodu")
     pw = driver.find_element(By.ID, "sifre")
     check_student = driver.find_element(By.XPATH, "//input[@value='Student']");
     
+    username.clear()
+    pw.clear()
+
     username.send_keys(student_num)
     pw.send_keys(passw)
     check_student.click()
     pw.send_keys(Keys.RETURN)
-    # We should be on the Ukey Homepage now
+    try:
+        WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")
+        return True # We should be on the Ukey Homepage now
+    except:
+        return False
 
 
-def get_cookies(driver):
+def get_cookies(driver, session):
     time.sleep(0.5)
-    for request in driver.requests:
-        if request.url == "https://ukey.uludag.edu.tr/Images/ukeyuser.jpg":
-            headers["Cookie"] = request.headers["Cookie"]
-            print("\nusing Cookies:",request.headers["Cookie"], "\n\n\n") 
+    cookies = driver.get_cookies()
+    for cookie in cookies:
+        session.cookies.set(cookie['name'], cookie['value'])
+
+
+def to_ascii(my_str):
+    new_ascii = my_str.replace('\u0130', 'I').replace('\u0131', 'i')
+    new_ascii = new_ascii.replace('\u011E', 'G').replace('\u011F', 'g')
+    new_ascii = new_ascii.replace('\u015E', 'S').replace('\u015F', 's')
+    new_ascii = new_ascii.replace('\u00C7', 'C').replace('\u00E7', 'c')
+    new_ascii = new_ascii.replace('\u00DC', 'U').replace('\u00FC', 'u')
+    new_ascii = new_ascii.replace('\u00D6', 'O').replace('\u00F6', 'o')
+    new_ascii = new_ascii.replace('/', '_').replace('\\', '_')
+    new_ascii = new_ascii.replace(':', '_').replace('?', '_')
+    new_ascii = new_ascii.replace('<', '_').replace('>', '_')
+    new_ascii = new_ascii.replace('!', '_').replace('*', '_')
+    new_ascii = new_ascii.replace('|', '_')
+    return new_ascii
+
+
+def get_time_dif(start):
+    elapsed_time = str(time.time() - start)
+    seconds = elapsed_time.split(".")[0]
+    mili_seconds = elapsed_time.split(".")[1][:3]
+    return seconds + "." + mili_seconds + "s"
 
 
 def download_for_current_class(driver, session, link_of_class, name_of_class): 
@@ -125,24 +139,23 @@ def download_for_current_class(driver, session, link_of_class, name_of_class):
                     name_str = to_ascii("-".join(name_list))
                     week_num = tr.text.split(" ")[-3]
 
-                    print("\nDownloading...\n" + week_num + "_" + class_n[0] + "_" + name_str)
+                    print("Downloading...\n" + week_num + "_" + class_n[0] + "_" + name_str)
                     
                     # Get Request
                     start = time.time()
-                    r = session.get(link, allow_redirects=True, headers=headers)
-                    print("Get-Request elapsed time:", str(time.time() - start) + "s")
-                    
+                    r = session.get(link, allow_redirects=True) #, headers=headers
+                    print("Get-Request elapsed time:", get_time_dif(start))
                     # gets file extension (for example:".pdf")
                     content_type = r.headers['content-type']
                     f_type = extension_dict[content_type]
-                    print(f_type)
+                    print("File-Extension:", f_type)
                     
                     # writing to file
                     start = time.time()
                     with open(os.path.join(dest_dir, week_num + "_" + name_str + f_type), "wb") as file:
                         for chunk in r.iter_content(chunk_size=128):
                             file.write(chunk)
-                    print("Writing-File elapsed time:", str(time.time() - start) + "s", "\n\n\n")
+                    print("Writing-File elapsed time:", get_time_dif(start), "\n\n")
 
     except:
         print("\n\nNo Download on this Page!\n")
@@ -151,42 +164,26 @@ def download_for_current_class(driver, session, link_of_class, name_of_class):
     driver.back()
 
 
-def to_ascii(my_str):
-    new_ascii = my_str.replace('\u0130', 'I').replace('\u0131', 'i')
-    new_ascii = new_ascii.replace('\u011E', 'G').replace('\u011F', 'g')
-    new_ascii = new_ascii.replace('\u015E', 'S').replace('\u015F', 's')
-    new_ascii = new_ascii.replace('\u00C7', 'C').replace('\u00E7', 'c')
-    new_ascii = new_ascii.replace('\u00DC', 'U').replace('\u00FC', 'u')
-    new_ascii = new_ascii.replace('\u00D6', 'O').replace('\u00F6', 'o')
-    new_ascii = new_ascii.replace('/', '_').replace('\\', '_')
-    new_ascii = new_ascii.replace(':', '_').replace('?', '_')
-    new_ascii = new_ascii.replace('<', '_').replace('>', '_')
-    new_ascii = new_ascii.replace('!', '_').replace('*', '_')
-    new_ascii = new_ascii.replace('|', '_')
-    return new_ascii
-
-
 def main():
-    # get Student-Number and Password as Input
-    student_num = input("\n\nLütfen ögrenci numaranizi giriniz: ")
-    passw = input("Lütfen sifrenizi giriniz: ")
-
     start = time.time()
-    driver = get_driver()
-    log_in(driver, student_num, passw)
-    try:
-        classes = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")        
-    except:
-        print("\n\n\nKullanici Adi veya Sifreniz hatali! Lütfen tekrar deneyiniz.")
-        student_num = input("\n\nLütfen ögrenci numaranizi giriniz: ")
-        passw = input("Lütfen sifrenizi giriniz: ")
-        log_in(driver, student_num, passw)
-        classes = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "metro"))).find_elements(By.TAG_NAME, "li")
-    
 
-    print("\nGiris yapildi!\n")
-    get_cookies(driver)
+    # start driver (selenium) and requests-session (for downloads)
+    driver = get_driver()
+    session = requests.Session()
+
+    print("\nStarting Browser...\n")
+    driver.get("https://ukey.uludag.edu.tr")
     
+    password_true = log_in(driver)
+    while(not password_true):
+        print("Ögrenci Numarasi veya Sifre hatali! Lütfen tekrar dene.\n")
+        password_true = log_in(driver)
+    
+    print("Giris yapildi!\n")
+
+    get_cookies(driver, session)
+    
+    classes = driver.find_element(By.CLASS_NAME, "metro").find_elements(By.TAG_NAME, "li")
     class_links = [];
     for my_class in classes:
         # finds all class links
@@ -194,10 +191,9 @@ def main():
         class_name = my_class.find_element(By.TAG_NAME, "a").text
         class_links.append((class_link, class_name))
 
-    print("Birinci indirme 20 saniye sürüyor. Sonra hizlanacak\n")
-    session = requests.Session()
+    print("Lütfen Bekle! Birinci indirme 20 saniye sürüyor. Sonra hizlanacak\n")
     
-    # crete dest folder
+    # create dest folder
     dest_folder = os.path.expandvars('%userprofile%/Downloads/ukey-download')
     if not os.path.isdir(dest_folder):
         os.mkdir(dest_folder)
@@ -206,8 +202,9 @@ def main():
         # iterates through all the classes and downloads
         download_for_current_class(driver, session, link, name)
 
-    print("Indirme Süresi:", str(time.time() - start) + "s")
-    print("\n\nSüpeeer! Indirme basarili!\nindirilen dosyalari 'Downloads' klasöründe bulabilirsin.\n\n\nHayirli calismalar ve iyi günler dilerim (:")
+    print("\nSüpeeer! Indirme basarili!\nIndirilen dosyalari 'Downloads' klasöründe bulabilirsin.")
+    print("Indirme Süresi:", get_time_dif(start))
+    print("\nHayirli calismalar ve iyi günler dilerim (:")
 
 
 if __name__ == "__main__":
