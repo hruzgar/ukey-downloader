@@ -18,7 +18,9 @@ Tüm ders materyallerini "https://ukey.uludag.edu.tr/" adresinden indir. Dönem 
 3. run.exe dosyasına çift tıkla
 4. Öğrenci numaranı ve şifreni gir
 5. İndirilme işlemi 5-10 dakika arası sürebilir
+
 Bu kadar ! Tadını çıkar !
+
 Herhangi bir Python paketi kurmanıza gerek yoktur. Hatta Pythona da gerek yoktur. Sadece çalışan bir Windows işletim sistemi yeter !
 
 ## 🐍 Kullanılan Python Kütüphaneleri
@@ -26,7 +28,7 @@ Herhangi bir Python paketi kurmanıza gerek yoktur. Hatta Pythona da gerek yoktu
 - pyinstaller (Python ve tüm paketlerini içinde barındıran .exe dosyası oluşturur)
 
 # 🤝🏻 Katkı Sağlamak
-Katkılarınıza açığız ve takdir ederiz. Biraz Python bilginiz varsa , Selenium-Framework hakkında bazı videolar izleyebilir ve projenin geliştirilmesine yardımcı olabilirsiniz. Teşekkürler !
+Katkılarınıza açığız ve takdir ederiz. Biraz Python bilginiz varsa, Selenium-Framework hakkında bazı videolar izleyebilir ve projenin geliştirilmesine yardımcı olabilirsiniz. Teşekkürler !
 
 
 ## EN
