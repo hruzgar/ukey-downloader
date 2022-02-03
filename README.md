@@ -13,15 +13,15 @@ Tüm ders materyallerini "https://ukey.uludag.edu.tr/" adresinden indir. Dönem 
 ## 🧑🏻‍💻 Nasıl Kullanılır
 Şimdilik sadece Windows işletim sisteminde çalışan sürümü mevcuttur
 ### Windows
-1. Sürümün Zip dosyasını indir
-2. Zip dosyasını çıkart 
-3. run.exe dosyasına çift tıkla
+1. "Releases"den en güncel sürümü indir
+2. Zip dosyasını çıkart
+3. iki sefer run.exe dosyasına tıkla
 4. Öğrenci numaranı ve şifreni gir
-5. İndirilme işlemi 5-10 dakika arası sürebilir
+5. İndirme işlemi 5-10 dakika arası sürebilir
 
 Bu kadar ! Tadını çıkar !
 
-Herhangi bir Python paketi kurmanıza gerek yoktur. Hatta Pythona da gerek yoktur. Sadece çalışan bir Windows işletim sistemi yeter !
+Herhangi bir Python paketi kurmanıza gerek yoktur. Hatta Python'a da gerek yoktur. Sadece çalışan bir Windows işletim sistemi yeter !
 
 ## 🐍 Kullanılan Python Kütüphaneleri
 - selenium (Tarayıcyı simüle eder)
@@ -30,6 +30,9 @@ Herhangi bir Python paketi kurmanıza gerek yoktur. Hatta Pythona da gerek yoktu
 ## 🤝🏻 Katkı Sağlamak
 Katkılarınıza açığız ve takdir ederiz. Biraz Python bilginiz varsa, Selenium-Framework hakkında bazı videolar izleyebilir ve projenin geliştirilmesine yardımcı olabilirsiniz. Teşekkürler !
 
+## Cevirmen
+Sabir Süleymanli
+[Linkedin](https://www.linkedin.com/in/sabirs/)
 ***
 ***
 ***
