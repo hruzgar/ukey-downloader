@@ -32,6 +32,7 @@ Katkılarınıza açığız ve takdir ederiz. Biraz Python bilginiz varsa, Selen
 
 ## Cevirmen
 Sabir Süleymanli
+
 [Linkedin](https://www.linkedin.com/in/sabirs/)
 ***
 ***
