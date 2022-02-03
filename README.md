@@ -31,9 +31,9 @@ Herhangi bir Python paketi kurmanıza gerek yoktur. Hatta Python'a da gerek yokt
 Katkılarınıza açığız ve takdir ederiz. Biraz Python bilginiz varsa, Selenium-Framework hakkında bazı videolar izleyebilir ve projenin geliştirilmesine yardımcı olabilirsiniz. Teşekkürler !
 
 ## 👨🏻‍🏫 Cevirmen
-Sabir Süleymanli
+### Sabir Süleymanli
 
-[Linkedin](https://www.linkedin.com/in/sabirs/)
+- [Linkedin](https://www.linkedin.com/in/sabirs/)
 ***
 ***
 ***
