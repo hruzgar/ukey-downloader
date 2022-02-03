@@ -159,6 +159,10 @@ def to_ascii(my_str):
     new_ascii = new_ascii.replace('\u00DC', 'U').replace('\u00FC', 'u')
     new_ascii = new_ascii.replace('\u00D6', 'O').replace('\u00F6', 'o')
     new_ascii = new_ascii.replace('/', '_').replace('\\', '_')
+    new_ascii = new_ascii.replace(':', '_').replace('?', '_')
+    new_ascii = new_ascii.replace('<', '_').replace('>', '_')
+    new_ascii = new_ascii.replace('!', '_').replace('*', '_')
+    new_ascii = new_ascii.replace('|', '_')
     return new_ascii
 
 
