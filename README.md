@@ -23,7 +23,6 @@ You don't need to install any python package. You don't even need python. Just a
 
 ## 🐍 Used Python libraries
 - selenium (simulates a browser)
-- selenium-wire (gets cookies for current session)
 - pyinstaller (creates the .exe file which includes python and all the packages)
 
 ## 🤝🏻 Contributing
