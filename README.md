@@ -1,5 +1,5 @@
-<a href="blob/main/README.tr.md"><img src="https://img.shields.io/badge/-T%C3%9CRK%C3%87E-red?style=for-the-badge"></a>
-<a href="blob/main/README.md"><img src="https://img.shields.io/badge/-ENGLISH-red?style=for-the-badge"></a>
+<a href="README.tr.md"><img src="https://img.shields.io/badge/-T%C3%9CRK%C3%87E-red?style=for-the-badge"></a>
+<a href="README.md"><img src="https://img.shields.io/badge/-ENGLISH-red?style=for-the-badge"></a>
 
 ## 🧩 Usecase
 Download all the lesson materials from "https://ukey.uludag.edu.tr/". The semester finished and you want to download all the lecture-notes and slides? Normally you would click each download link, Create folders for each class, Rename the files (adding the week-number). That is just too much work to do. Not anymore! 
