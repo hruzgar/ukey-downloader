@@ -1,3 +1,6 @@
+<a href="README.tr.md"><img src="https://img.shields.io/badge/-T%C3%9CRK%C3%87E-red?style=for-the-badge"></a>
+<a href="README.md"><img src="https://img.shields.io/badge/-ENGLISH-red?style=for-the-badge"></a>
+
 ## 🧩 Hedef
 Tüm ders materyallerini "https://ukey.uludag.edu.tr/" adresinden indir. Dönem bitti ve sen tüm ders notlarını ve slaytları indirmek mi istiyorsun? Genel olarak ders materyallerinin linklerine teker teker tıklar , her ders için klasörler oluşturur ve indirdiğiniz dosyaları yeniden adlandırırsınız (hangi haftaya ait olduğunu ekleyerek). Bu aslında yapılacak baya iş demek. Ama artık değil !
 
