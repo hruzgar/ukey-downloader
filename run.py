@@ -69,10 +69,10 @@ def get_driver():
 
 
 def log_in(driver):
-    student_num = input("Lütfen ögrenci numaranizi giriniz: ")
-    passw = input("Lütfen sifrenizi giriniz: ")
+    student_num = input('[ukey-login]: Lütfen öğrenci numaranızı giriniz: ')
+    passw = input('[ukey-login]: Lütfen şifrenizi giriniz: ')
 
-    print("\nGiris yapiliyor...\n")
+    print('[ukey-login]: Giriş yapılıyor')
 
     username = driver.find_element(By.ID, "KullaniciKodu")
     pw = driver.find_element(By.ID, "sifre")
@@ -150,29 +150,33 @@ def download_for_current_class(driver, session, link_of_class, name_of_class):
                     name_str = to_ascii("-".join(name_list))
                     week_num = tr.text.split(" ")[-3]
 
-                    print("Downloading...\n" + week_num + "_" + class_n[0] + "_" + name_str)
+                    print('[download]: İndirilen dosya: ' + week_num + "_" + class_n[0] + "_" + name_str)
 
                     # Get Request
                     start = time.time()
                     r = session.get(link, allow_redirects=True)  # , headers=headers
-                    print("Get-Request elapsed time:", get_time_dif(start))
+                    print(f'[download]: GET isteği için geçen süre: {get_time_dif(start)}')
                     # gets file extension (for example:".pdf")
                     content_type = r.headers['content-type']
                     f_type = extension_dict[content_type]
-                    print("File-Extension:", f_type)
+                    print(f'[download]: Dosya uzantısı: {f_type}')
 
                     # writing to file
                     start = time.time()
                     with open(os.path.join(dest_dir, week_num + "_" + name_str + f_type), "wb") as file:
                         for chunk in r.iter_content(chunk_size=128):
                             file.write(chunk)
-                    print("Writing-File elapsed time:", get_time_dif(start), "\n\n")
+                    print(f'[download]: Dosya kaydı için geçen süre: {get_time_dif(start)}\n\n')
 
     except:
-        print("\n\nNo Download on this Page!\n")
+        print('[download]: Bu sayfada indirilebilir içerik bulunamadı!')
 
     driver.back()
     driver.back()
+
+
+def msg(message):
+    print(f'[ukey-downloader]: {message}')
 
 
 def main():
@@ -182,15 +186,15 @@ def main():
     driver = get_driver()
     session = requests.Session()
 
-    print("\nStarting Browser...\n")
-    driver.get("https://ukey.uludag.edu.tr")
+    msg('Chrome başlatılıyor')
+    driver.get('https://ukey.uludag.edu.tr')
 
     password_true = log_in(driver)
     while not password_true:
-        print("Ögrenci Numarasi veya Sifre hatali! Lütfen tekrar dene.\n")
+        msg('Öğrenci numarası veya şifre hatalı. Lütfen tekrar deneyin.')
         password_true = log_in(driver)
 
-    print("Giris yapildi!\n")
+    msg("UKEY'e giriş başarılı!")
 
     get_cookies(driver, session)
 
@@ -202,7 +206,7 @@ def main():
         class_name = my_class.find_element(By.TAG_NAME, "a").text
         class_links.append((class_link, class_name))
 
-    print('Lütfen Bekle! Birinci indirme 20 saniye sürüyor. Sonra hizlanacak\n')
+    msg('İlk indirme işlemi biraz vakit alabilir, işlem zamanla hızlanacaktır.')
 
     # Set platform-specific global variables
     global destination_folder
@@ -223,12 +227,10 @@ def main():
         download_for_current_class(driver, session, link, name)
 
     driver.quit()
-    print("\nSüpeeer! Indirme basarili!\nIndirilen dosyalari 'Downloads' klasöründe bulabilirsin.")
-    print("Indirme Süresi:", get_time_dif(start))
-    print('''\nPencereyi kapatabilirsin simdi. 60 saniye icinde kendisi kapatacaktir.
-    \nHayirli calismalar ve iyi günler dilerim (:''')
-    time.sleep(60)
-
+    msg(f"UKEY'de bulunan tüm dersler indirildi! İndirme klasörü: {destination_folder}")
+    msg(f"İndirme işlemi {get_time_dif(start)} saniyede tamamlandı.")
+    print(f'ukey-downloader\'ı kullandığın için teşekkür ederiz!')
+    time.sleep(15)
 
 if __name__ == "__main__":
     main()
