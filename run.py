@@ -40,9 +40,21 @@ extension_dict = {
     
 def get_driver():
 
-    # Path to chrome and chromedriver
-    chromedriver_service = Service("chrome/cdriver/chromedriver.exe")
-    chrome_PATH = "chrome/App/Chrome-bin/chrome.exe"
+    # Sets the path to chrome and chromedriver executables
+    if sys.platform == "win32":
+        chromedriver_service = Service("chrome/cdriver/chromedriver.exe")
+        chrome_PATH = "chrome/App/Chrome-bin/chrome.exe"
+    elif sys.platform == "linux":
+        chromedriver_service = Service("/usr/bin/chromedriver")
+        if os.path.exists("/usr/bin/google-chrome"):
+            chrome_PATH = "/usr/bin/google-chrome"
+        elif os.path.exists("/usr/bin/chromium"):
+            chrome_PATH = "/usr/bin/chromium"
+        else:
+            chrome_PATH = input("ukey-downloader chrome kurulumunu bulamadı. lütfen chrome çalıştırılabilir dosyasının tam konumunu giriniz: ")
+            if not os.path.exists(chrome_PATH):
+                print("böyle bir dosya yok ki :( script'i kapatıyorum.")
+                sys.exit()
 
     # chrome settings for selenium
     chrome_options = webdriver.ChromeOptions()
@@ -126,7 +138,7 @@ def download_for_current_class(driver, session, link_of_class, name_of_class):
 
                 if(td.text == "Dosyayı Aç"):
                     class_n = [to_ascii(x) for x in name_of_class.split(" - ")]
-                    dest_dir = os.path.expandvars('%userprofile%/Downloads/ukey-download/' + "-".join(class_n[1].split(" ")))
+                    dest_dir = destination_folder + "-".join(class_n[1].split(" "))
                     if not os.path.isdir(dest_dir):
                         os.mkdir(dest_dir)
 
@@ -193,10 +205,19 @@ def main():
 
     print("Lütfen Bekle! Birinci indirme 20 saniye sürüyor. Sonra hizlanacak\n")
     
-    # create dest folder
-    dest_folder = os.path.expandvars('%userprofile%/Downloads/ukey-download')
-    if not os.path.isdir(dest_folder):
-        os.mkdir(dest_folder)
+    # Set platform-specific global variables
+    global destination_folder
+    if sys.platform == "win32":
+        destination_folder = os.path.expandvars('%userprofile%/Downloads/ukey-download/')
+    elif sys.platform == "linux":
+        destination_folder = os.path.expandvars('$HOME/Downloads/ukey-download/')
+    else:
+        destination_folder = input('''ukey-downloader işletim sistemini desteklemiyor.
+        ancak yine de indirme işlemini deneyebilirsin.
+        ders klasörlerinin yerleştirileceği klasörü belirt: ''')
+
+    if not os.path.isdir(destination_folder):
+        os.mkdir(destination_folder)
 
     for link, name in class_links:
         # iterates through all the classes and downloads
