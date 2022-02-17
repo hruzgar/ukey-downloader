@@ -2,7 +2,7 @@
 <a href="README.tr.md"><img src="https://img.shields.io/badge/-T%C3%9CRK%C3%87E-red?style=for-the-badge"></a>
 <a href="README.md"><img src="https://img.shields.io/badge/-ENGLISH-red?style=for-the-badge"></a>
 
-## 🧩 Usecase
+## 🧩 ukey-downloader
 
 ukey-downloader lets you download all available course materials from your UKEY account with the push of a button.
 
@@ -15,8 +15,6 @@ The semester has finished and you want to download all the lecture notes and sli
 
 ## 🧑🏻‍💻 How to use
 
-Only Windows is officially supported (for now!)
-
 ### Windows
 
 1. Download the latest release (a zip file will be provided)
@@ -28,6 +26,16 @@ Only Windows is officially supported (for now!)
 That's all! Enjoy
 
 You don't need to install any Python packages, all dependencies are packed into one executable! You don't even need the Python interpreter installed. Just a working Windows machine will get you going!
+
+### GNU/Linux
+
+1. Clone the repository to your local
+2. Resolve dependency selenium by running command ```pip install selenium```
+3. Download and place [ChromeDriver](https://chromedriver.chromium.org/downloads) executable to /usr/bin
+> Important Warning: Do not use ChromeDriver major version 98 as it has issues regarding special characters. Use of v97 with Chromium v98 is tested 
+4. Run the script by typing ```python3 run.py```
+5. Enter your student number and password
+6. The download process may take between 5 to 10 minutes, compile [UngoogledChromium](https://github.com/Eloston/ungoogled-chromium) from source while you wait
 
 ## 🐍 Dependencies for developing
 - selenium (simulates a web client)
