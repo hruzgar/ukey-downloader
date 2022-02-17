@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 import time
 import requests
+import getpass
 import sys
 import os.path
 
@@ -70,7 +71,7 @@ def get_driver():
 
 def log_in(driver):
     student_num = input('[ukey-login]: Lütfen öğrenci numaranızı giriniz: ')
-    passw = input('[ukey-login]: Lütfen şifrenizi giriniz: ')
+    passw = getpass.getpass('[ukey-login]: Lütfen şifrenizi giriniz: ')
 
     print('[ukey-login]: Giriş yapılıyor')
 
@@ -231,6 +232,7 @@ def main():
     msg(f"İndirme işlemi {get_time_dif(start)} saniyede tamamlandı.")
     print(f'ukey-downloader\'ı kullandığın için teşekkür ederiz!')
     time.sleep(15)
+
 
 if __name__ == "__main__":
     main()
