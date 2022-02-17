@@ -2,7 +2,7 @@
 <a href="README.tr.md"><img src="https://img.shields.io/badge/-T%C3%9CRK%C3%87E-red?style=for-the-badge"></a>
 <a href="README.md"><img src="https://img.shields.io/badge/-ENGLISH-red?style=for-the-badge"></a>
 
-## 🧩 Usecase
+## 🧩 ukey-downloader
 
 ukey-downloader lets you download all available course materials from your UKEY account with the push of a button.
 
@@ -14,8 +14,6 @@ The semester has finished and you want to download all the lecture notes and sli
 - Renames files using ASCII-supported characters and appends week number
 
 ## 🧑🏻‍💻 How to use
-
-Only Windows is officially supported (for now!)
 
 ### Windows
 
