@@ -29,13 +29,18 @@ You don't need to install any Python packages, all dependencies are packed into 
 
 ### GNU/Linux
 
-1. Clone the repository to your local
+1. Download and install [python](https://www.python.org/) if you haven't already (preferably v3.9)
 2. Resolve dependency selenium by running command ```pip install selenium```
-3. Download and place [ChromeDriver](https://chromedriver.chromium.org/downloads) executable to /usr/bin
+3. Download and install chrome (google-chrome or chromium)(preferably v97)
+4. Download and place [ChromeDriver](https://chromedriver.chromium.org/downloads) executable to /usr/bin
 > Important Warning: Do not use ChromeDriver major version 98 as it has issues regarding special characters. Use of v97 with Chromium v98 is tested 
-4. Run the script by typing ```python3 run.py```
-5. Enter your student number and password
-6. The download process may take between 5 to 10 minutes, compile [UngoogledChromium](https://github.com/Eloston/ungoogled-chromium) from source while you wait
+5. Clone the repository to your local with 
+```bash
+git clone https://github.com/hruzgar/ukey-downloader.git
+```
+6. Install ukey-downloader by running the installer script with ```./install.sh```
+7. You should be able to find ukeydl on your applications-list now. If you are not using any window manager just run ukeydl which you can find at /usr/local/bin/ukeydl
+
 
 ## 🐍 Dependencies for developing
 - selenium (simulates a web client)
