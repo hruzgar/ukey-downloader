@@ -1,0 +1,6 @@
+#!/bin/bash
+# ukey-downloader starter
+# Maintainer: Ferit Yigit BALABAN
+
+# This script can be used to call an update script that downloads new run.py from GitHub releases
+python3 /usr/local/bin/ukey-downloader/run.py

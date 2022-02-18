@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.4
+Type=Application
+Terminal=true
+Exec=/usr/local/bin/ukeydl
+Name=ukeydl
+Icon=/usr/local/bin/ukey-downloader/icon.ico
