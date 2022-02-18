@@ -45,4 +45,4 @@ Herhangi bir Python paketi kurmana gerek yok çünkü tüm gereksinimler tek bir
 
 Katkılarınıza açığız ve takdir ederiz. Biraz Python bilginiz varsa, Selenium Framework hakkında video izleyebilir ve projenin geliştirilmesine yardımcı olabilirsiniz. Teşekkürler!
 
- - ukey-downloader'ın v1-v1.4 arasında kullandığı README dosyasının çevirisini yaptığı için [Sabir Süleymanlı'ya](https://www.linkedin.com/in/sabirs/) teşekkür ederiz.
+ - ukey-downloader'ın v1-v1.2 arasında kullandığı README dosyasının çevirisini yaptığı için [Sabir Süleymanlı'ya](https://www.linkedin.com/in/sabirs/) teşekkür ederiz.
