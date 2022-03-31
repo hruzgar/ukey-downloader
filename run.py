@@ -34,6 +34,9 @@ extension_dict = {
     'application/pdf': '.pdf'
 }
 
+# Set platform-specific global variables
+destination_folder = ''
+
 
 def get_driver():
     # Sets the path to chrome and chromedriver executables
@@ -47,7 +50,7 @@ def get_driver():
         elif os.path.exists("/usr/bin/chromium"):
             path_chrome = "/usr/bin/chromium"
         else:
-            path_chrome = input('''ukey-downloader Chrome kurulumunu bulamadı. 
+            path_chrome = input('''ukeydl Chrome kurulumunu bulamadı. 
             Lütfen chrome çalıştırılabilir dosyasının tam konumunu giriniz: ''')
             if not os.path.exists(path_chrome):
                 print("böyle bir dosya yok ki :(")
@@ -177,7 +180,7 @@ def download_for_current_class(driver, session, link_of_class, name_of_class):
 
 
 def msg(message):
-    print(f'[ukey-downloader]: {message}')
+    print(f'[ukeydl]: {message}')
 
 
 def main():
@@ -209,14 +212,13 @@ def main():
 
     msg('İlk indirme işlemi biraz vakit alabilir, işlem zamanla hızlanacaktır.')
 
-    # Set platform-specific global variables
     global destination_folder
     if sys.platform == "win32":
         destination_folder = os.path.expandvars('%userprofile%/Downloads/ukey-download/')
     elif sys.platform == "linux":
         destination_folder = os.path.expandvars('$HOME/Downloads/ukey-download/')
     else:
-        destination_folder = input('''ukey-downloader işletim sistemini desteklemiyor.
+        destination_folder = input('''ukeydl işletim sistemini desteklemiyor.
         ancak yine de indirme işlemini deneyebilirsin.
         ders klasörlerinin yerleştirileceği klasörü belirt: ''')
 
@@ -230,7 +232,7 @@ def main():
     driver.quit()
     msg(f"UKEY'de bulunan tüm dersler indirildi! İndirme klasörü: {destination_folder}")
     msg(f"İndirme işlemi {get_time_dif(start)} saniyede tamamlandı.")
-    print(f'ukey-downloader\'ı kullandığın için teşekkür ederiz!')
+    print(f'ukeydl\'i kullandığın için teşekkür ederiz!')
     time.sleep(15)
 
 
