@@ -34,6 +34,9 @@ extension_dict = {
     'application/pdf': '.pdf'
 }
 
+# Set platform-specific global variables
+destination_folder = ''
+
 
 def get_driver():
     # Sets the path to chrome and chromedriver executables
@@ -209,7 +212,6 @@ def main():
 
     msg('İlk indirme işlemi biraz vakit alabilir, işlem zamanla hızlanacaktır.')
 
-    # Set platform-specific global variables
     global destination_folder
     if sys.platform == "win32":
         destination_folder = os.path.expandvars('%userprofile%/Downloads/ukey-download/')
